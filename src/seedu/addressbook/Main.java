@@ -28,10 +28,14 @@ public class Main {
     private TextUi ui;
     private StorageFile storage;
     private AddressBook addressBook;
+    private Parser parser; // Store as variable rather than always instantiating it
 
     /** The list of person shown to the user most recently.  */
     private List<? extends ReadOnlyPerson> lastShownList = Collections.emptyList();
 
+    public Main() {
+        this.parser = new Parser();
+    }
 
     public static void main(String... launchArgs) {
         new Main().run(launchArgs);
@@ -83,7 +87,7 @@ public class Main {
         Command command;
         do {
             String userCommandText = ui.getUserCommand();
-            command = new Parser().parseCommand(userCommandText);
+            command = this.parser.parseCommand(userCommandText);
             CommandResult result = executeCommand(command);
             recordResult(result);
             ui.showResultToUser(result);
