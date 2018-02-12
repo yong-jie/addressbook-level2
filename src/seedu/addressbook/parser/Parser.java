@@ -22,6 +22,7 @@ import seedu.addressbook.commands.IncorrectCommand;
 import seedu.addressbook.commands.ListCommand;
 import seedu.addressbook.commands.ViewAllCommand;
 import seedu.addressbook.commands.ViewCommand;
+import seedu.addressbook.commands.RepeatCommand;
 import seedu.addressbook.data.exception.IllegalValueException;
 
 /**
@@ -41,6 +42,10 @@ public class Parser {
                     + " (?<isAddressPrivate>p?)a/(?<address>[^/]+)"
                     + "(?<tagArguments>(?: t/[^/]+)*)"); // variable number of tags
 
+    /**
+     * Stores the last used valid commands.
+     */
+    private RepeatCommand commandCache;
 
     /**
      * Signals that the user input could not be parsed.
@@ -56,7 +61,9 @@ public class Parser {
      */
     public static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
 
-    public Parser() {}
+    public Parser() {
+        this.commandCache = new RepeatCommand();
+    }
 
     /**
      * Parses user input into command for execution.
@@ -70,8 +77,17 @@ public class Parser {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
-        final String commandWord = matcher.group("commandWord");
-        final String arguments = matcher.group("arguments");
+        String commandWord = matcher.group("commandWord");
+        String arguments = matcher.group("arguments");
+
+        if (!commandWord.equals(RepeatCommand.COMMAND_WORD)) {
+            // Cache the command and arguments
+            this.commandCache.setPreviousCommand(commandWord);
+            this.commandCache.setPreviousArguments(arguments);
+        } else if (this.commandCache.hasValidPreviousCommand()) {
+            commandWord = this.commandCache.getPreviousCommand();
+            arguments = this.commandCache.getPreviousArguments();
+        }
 
         switch (commandWord) {
 
@@ -99,8 +115,15 @@ public class Parser {
         case ExitCommand.COMMAND_WORD:
             return new ExitCommand();
 
-        case HelpCommand.COMMAND_WORD: // Fallthrough
+        case RepeatCommand.COMMAND_WORD:
+            // If it gets here, then there are no valid commands to be repeated
+            return new RepeatCommand();
+
+        case HelpCommand.COMMAND_WORD:
+            return new HelpCommand();
         default:
+            // The command was not valid, hence delete cached command and arguments
+            this.commandCache.resetCommandAndArguments();
             return new HelpCommand();
         }
     }
