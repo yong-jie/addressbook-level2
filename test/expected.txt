@@ -27,6 +27,8 @@
 || Example: viewall 1
 || help: Shows program usage instructions.
 || Example: help
+|| repeat: Adds a person to the address book.
+|| Example: repeat
 || exit: Exits the program.
 || Example: exit
 || ===================================================
@@ -294,6 +296,10 @@
 || Address book has been cleared!
 || ===================================================
 || Enter command: || [Command entered:  list]
+|| 
+|| 0 persons listed!
+|| ===================================================
+|| Enter command: || [Command entered:  repeat]
 || 
 || 0 persons listed!
 || ===================================================
