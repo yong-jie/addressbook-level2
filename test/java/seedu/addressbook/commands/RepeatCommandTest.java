@@ -27,7 +27,6 @@ public class RepeatCommandTest {
     public void repeatCommand_repeatCorrectly_throwsException() {
         this.parser.parseCommand("list");
         final Command secondCommand = this.parser.parseCommand("repeat");
-        //final CommandResult secondCommandResult = secondCommand.execute();
         assertThat(secondCommand, instanceOf(ListCommand.class));
     }
 }
