@@ -115,6 +115,10 @@ Examples:
 Clears all entries from the address book.<br>
 Format: `clear`  
 
+### Repeating previous command : `repeat`
+Repeats the last used valid command
+Format: `repeat`
+
 #### Exiting the program : `exit`
 Exits the program.<br>
 Format: `exit`  
