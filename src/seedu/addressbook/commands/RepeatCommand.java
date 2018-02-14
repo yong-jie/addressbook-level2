@@ -1,5 +1,8 @@
 package seedu.addressbook.commands;
 
+/**
+ * Repeats the last used valid command.
+ */
 public class RepeatCommand extends Command {
     private String previousCommand;
     private String previousArguments;
