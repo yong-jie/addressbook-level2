@@ -2,6 +2,7 @@ package seedu.addressbook.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -29,6 +30,29 @@ import seedu.addressbook.data.tag.Tag;
 import seedu.addressbook.data.tag.UniqueTagList;
 
 public class TestUtil {
+    @Test
+    public void isAnyNull() throws Exception {
+        // No false positives
+        assertNoNull("");
+        assertNoNull("", 1);
+
+        // No false negatives
+        assertHasNull((Object) null);
+        assertHasNull((Object) null, 1);
+        assertHasNull("", (Object) null);
+        assertHasNull("", (Object) null, 1);
+        assertHasNull(1, "", (Object) null);
+
+    }
+
+    private void assertNoNull(Object... objects) {
+        assertFalse(Utils.isAnyNull(objects));
+    }
+
+    private void assertHasNull(Object... objects) {
+        assertTrue(Utils.isAnyNull(objects));
+    }
+    
     /**
      * Creates an address book containing the given persons.
      */
